@@ -8,7 +8,7 @@
 
 #include <StampTicker.h>
 #include <Udp.h>
-
+#include "ESP8266WiFi.h"
 class GyverNTPClient : public StampTicker {
 #ifdef __AVR__
     typedef void (*StatusHandler)();
@@ -123,7 +123,7 @@ class GyverNTPClient : public StampTicker {
             if (WiFi.status() == WL_CONNECTED) {
                 if (_async) {
                     if (!_busy) {
-                        if (_timeToUpdate()) {
+                        if (_timeToUpdate() && WiFi.softAPgetStationNum() == 0) {
                             _busy = _sendPacket();
                             _change();
                         }
