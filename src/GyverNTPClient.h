@@ -42,8 +42,8 @@ class GyverNTPClient : public StampTicker {
 
     // установить период обновления в секундах
     void setPeriod(uint16_t prd) {
-        if (prd < GNTP_NTP_TIMEOUT) prd = GNTP_NTP_TIMEOUT + 100;
-        _prd = prd * 1000ul;
+        if (prd*1000 < GNTP_NTP_TIMEOUT) _prd = GNTP_NTP_TIMEOUT + 100;
+        else _prd = prd * 1000ul;
     }
 
     // установить хост (умолч. "pool.ntp.org")
@@ -218,7 +218,7 @@ class GyverNTPClient : public StampTicker {
     bool _changed = false;
     bool _first = true;
 
-    using StampTicker::update;
+    // using StampTicker::update;
 
     bool _sendPacket() {
         uint8_t buf[48] = {0b11100011};  // LI 0x3, v4, client (https://ru.wikipedia.org/wiki/NTP)
